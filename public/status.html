@@ -63,6 +63,7 @@
 <script>
   document.getElementById("year").textContent = new Date().getFullYear();
 
+  // List of remote endpoints your proxy will check
   const endpoints = [
     {name:"OpsLink CAD", url:"https://opslink-cad.onrender.com/api/status"},
     {name:"OpsLink Hosting", url:"https://node2.opslinkcad.com/api/status"},
@@ -76,29 +77,35 @@
     {name:"OpsLink Website", url:"https://opslinksystems.xyz/api/status"}
   ];
 
-  async function checkEndpoint(ep){
+  // Fetch from internal proxy API instead of direct calls (bypasses CORS)
+  async function checkEndpoint(ep) {
     const start = performance.now();
     try {
-      const res = await fetch(ep.url, {cache:"no-store", mode:"cors"});
+      // Use internal proxy route hosted in /api directory
+      const proxy = `/api/status-proxy?url=${encodeURIComponent(ep.url)}`;
+      const res = await fetch(proxy, { cache: "no-store" });
       const latency = Math.round(performance.now() - start);
-      if(!res.ok) throw new Error("HTTP "+res.status);
-      const data = await res.json().catch(()=>({}));
+
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json().catch(() => ({}));
+
       let status = (data.status || "ok").toLowerCase();
-      if(!["ok","degraded","down"].includes(status)) status="ok";
-      return {name:ep.name,status,latency,url:ep.url};
-    } catch(e){
-      return {name:ep.name,status:"down",latency:null,url:ep.url};
+      if (!["ok", "degraded", "down"].includes(status)) status = "ok";
+
+      return { name: ep.name, status, latency, url: ep.url };
+    } catch (e) {
+      return { name: ep.name, status: "down", latency: null, url: ep.url };
     }
   }
 
-  async function refreshStatus(){
+  async function refreshStatus() {
     const container = document.getElementById("statusContainer");
     container.innerHTML = "";
     const results = await Promise.all(endpoints.map(checkEndpoint));
 
-    results.forEach(r=>{
+    results.forEach((r) => {
       const div = document.createElement("div");
-      div.className="card";
+      div.className = "card";
       div.innerHTML = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <strong>${r.name}</strong>
@@ -106,11 +113,11 @@
         </div>
         <div class="service">
           <span>Status:</span>
-          <span>${r.status==="ok"?"Operational":r.status==="degraded"?"Degraded":"Outage"}</span>
+          <span>${r.status === "ok" ? "Operational" : r.status === "degraded" ? "Degraded" : "Outage"}</span>
         </div>
         <div class="service">
           <span>Latency:</span>
-          <span>${r.latency!==null? r.latency+" ms":"N/A"}</span>
+          <span>${r.latency !== null ? r.latency + " ms" : "N/A"}</span>
         </div>
         <div class="service">
           <span>Endpoint:</span>
@@ -120,22 +127,23 @@
       container.appendChild(div);
     });
 
-    const statuses = results.map(r=>r.status);
+    const statuses = results.map((r) => r.status);
     const globalDot = document.getElementById("globalDot");
     const globalText = document.getElementById("globalText");
     const updatedText = document.getElementById("updatedText");
 
-    if(statuses.includes("down")){
-      globalDot.className="dot down";
-      globalText.textContent="Service outage detected";
-    } else if(statuses.includes("degraded")){
-      globalDot.className="dot degraded";
-      globalText.textContent="Partial service degradation";
+    if (statuses.includes("down")) {
+      globalDot.className = "dot down";
+      globalText.textContent = "Service outage detected";
+    } else if (statuses.includes("degraded")) {
+      globalDot.className = "dot degraded";
+      globalText.textContent = "Partial service degradation";
     } else {
-      globalDot.className="dot ok";
-      globalText.textContent="All systems operational";
+      globalDot.className = "dot ok";
+      globalText.textContent = "All systems operational";
     }
-    updatedText.textContent = "Last updated: "+new Date().toLocaleString();
+
+    updatedText.textContent = "Last updated: " + new Date().toLocaleString();
   }
 
   refreshStatus();
