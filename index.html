@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OpsLink Systems — Enterprise Infrastructure & Technology Solutions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OpsLink Systems is a next-generation enterprise providing hosting, dispatch, domain, and security infrastructure for digital communities and organizations." />
+  <link rel="icon" href="https://opslinkcad.com/assets/OpsLinkLogo.png" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --brand:#4E8CFF;
+      --brand-dark:#1f4fd1;
+      --text:#0f172a;
+      --muted:#64748b;
+      --bg:#ffffff;
+      --radius:14px;
+      --shadow:0 10px 36px rgba(0,0,0,.08);
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif}
+    body{background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* NAVBAR */
+    nav{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:26px 9%;position:sticky;top:0;z-index:40;
+      background:rgba(255,255,255,.7);backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(0,0,0,.05);
+    }
+    .logo{
+      font-size:22px;font-weight:800;letter-spacing:-.6px;cursor:pointer;
+      display:flex;flex-direction:column;line-height:1.1;
+    }
+    .logo span.sub{
+      font-size:11px;font-weight:500;color:var(--muted);
+    }
+
+    .nav-buttons{display:flex;gap:14px;align-items:center}
+
+    .btn{
+      padding:10px 20px;border-radius:999px;border:none;cursor:pointer;
+      font-weight:600;font-size:14px;transition:.2s;
+    }
+    .btn-outline{background:#fff;border:1px solid rgba(0,0,0,.08)}
+    .btn-outline:hover{transform:translateY(-1px)}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+      color:#fff;box-shadow:0 4px 18px rgba(78,140,255,.32)
+    }
+    .btn-primary:hover{transform:translateY(-2px)}
+
+    /* HERO */
+    .hero{
+      text-align:center;padding:120px 20px 80px;position:relative;
+    }
+    .hero h1{
+      font-size:clamp(38px,5vw,64px);font-weight:800;
+      letter-spacing:-1.5px;margin-bottom:16px;line-height:1.05;
+    }
+    .hero p{
+      max-width:640px;margin:auto;font-size:17px;color:var(--muted);
+      line-height:1.7
+    }
+
+    .wave-bg{
+      position:absolute;inset:0;z-index:-1;pointer-events:none;
+      background:
+        radial-gradient(circle at 60% -18%,#bbd7ff 0,transparent 60%),
+        radial-gradient(circle at -10% 80%,#e4efff 0,transparent 70%);
+    }
+
+    /* BADGE */
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 14px;border-radius:999px;
+      background:rgba(78,140,255,.08);
+      border:1px solid rgba(78,140,255,.18);
+      font-size:12px;font-weight:600;color:var(--brand-dark);
+      margin-bottom:18px;
+    }
+    .badge .dot{
+      width:8px;height:8px;border-radius:50%;background:#22c55e;
+      box-shadow:0 0 0 6px rgba(34,197,94,.23);
+    }
+
+    .cta-row{
+      margin-top:32px;display:flex;justify-content:center;
+      flex-wrap:wrap;gap:12px;
+    }
+
+    .hero-meta{
+      margin-top:22px;font-size:13px;color:var(--muted);
+      display:flex;justify-content:center;gap:18px;flex-wrap:wrap;
+    }
+
+    /* FEATURES */
+    .section{padding:40px 9%;max-width:1120px;margin:auto}
+    .section-title{font-size:24px;font-weight:700;margin-bottom:10px}
+    .section-sub{font-size:15px;color:var(--muted);max-width:520px}
+
+    .features-grid{
+      margin-top:26px;display:grid;gap:18px;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    .feature-card{
+      background:#fff;border-radius:var(--radius);
+      padding:18px;border:1px solid rgba(0,0,0,.05);
+      box-shadow:0 10px 30px rgba(0,0,0,.03);
+    }
+    .feature-icon{
+      width:32px;height:32px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:16px;margin-bottom:10px;background:rgba(78,140,255,.1);
+    }
+
+    .strip{
+      margin-top:50px;background:rgba(78,140,255,.05);
+      padding:20px;border-radius:var(--radius);font-size:14px;
+      display:flex;justify-content:space-between;align-items:center;
+      border:1px solid rgba(78,140,255,.18);flex-wrap:wrap;gap:10px;
+    }
+    .strip small{color:var(--muted)}
+
+    footer{
+      text-align:center;padding:45px 0;margin-top:70px;color:var(--muted);
+      border-top:1px solid rgba(0,0,0,.05);font-size:14px
+    }
+
+    @media(max-width:880px){.features-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo" onclick="location.href='/'">
+    OpsLink Systems
+    <span class="sub">An Enterprise in Technology & Infrastructure</span>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-outline" onclick="location.href='/about'">About</button>
+    <button class="btn btn-outline" onclick="location.href='/solutions'">Solutions</button>
+    <button class="btn btn-primary" onclick="location.href='/portal'">Client Portal</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wave-bg"></div>
+
+  <div class="badge">
+    <div class="dot"></div>
+    Enterprise-grade infrastructure. Global reliability.
+  </div>
+
+  <h1>OpsLink Systems Enterprise Infrastructure</h1>
+  <p>
+    OpsLink Systems is an enterprise providing high-performance hosting, dispatch, security, 
+    and domain solutions — trusted by communities, businesses, and organizations worldwide.
+  </p>
+
+  <div class="cta-row">
+    <button class="btn btn-primary" onclick="location.href='/solutions'">Explore Enterprise Solutions</button>
+    <button class="btn btn-outline" onclick="location.href='/contact'">Contact Enterprise</button>
+  </div>
+
+  <div class="hero-meta">
+    <span>Hosting • CAD • Domains • Security</span>
+    <span>Enterprise-Backed Performance</span>
+    <span>OpsLink Global Network</span>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Enterprise Divisions</h2>
+  <p class="section-sub">OpsLink Systems operates multiple divisions, each designed to advance enterprise-grade technology for communities and organizations worldwide.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💻</div>
+      <h3>OpsLink Hosting</h3>
+      <p>Enterprise-grade game, bot, and web hosting with dedicated global nodes and premium performance for every operation.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🚨</div>
+      <h3>OpsLink CAD</h3>
+      <p>A next-gen dispatch, MDT, and operations management system — built for realism, reliability, and enterprise-grade scalability.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🛡️</div>
+      <h3>OpsLink Safeguard</h3>
+      <p>Advanced Discord security and anti-raid automation for complete community protection and moderation control.</p>
+      <p style="margin-top:10px;font-size:14px;color:var(--muted);"><strong>Safeguard Premier</strong> — our elite tier, offering enhanced AI-driven defense, audit trails, and cross-server synchronization for enterprise-level safety.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <h3>OpsLink Domains</h3>
+      <p>Professional domain registration and management platform with automated DNS, SSL, and branding integration across the OpsLink ecosystem.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <h3>OpsLink Infrastructure</h3>
+      <p>The global backbone powering all OpsLink divisions — cloud-based, API-integrated, and optimized for scalability and uptime.</p>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div>
+      OpsLink Systems operates as an enterprise delivering innovative infrastructure and integrated digital services across multiple platforms.
+      <br/><small>Reliability • Innovation • Enterprise Performance</small>
+    </div>
+    <strong>OpsLink Systems © <span id="year"></span></strong>
+  </div>
+</section>
+
+<footer>
+  © <span id="year-footer"></span> OpsLink Systems Enterprise. All Rights Reserved.
+</footer>
+
+<script>
+  const y = new Date().getFullYear();
+  document.getElementById("year").textContent = y;
+  document.getElementById("year-footer").textContent = y;
+</script>
+
+</body>
+</html>
