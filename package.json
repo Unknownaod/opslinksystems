@@ -1,0 +1,30 @@
+{
+  "name": "opslink-status",
+  "version": "1.0.0",
+  "description": "OpsLink Systems Enterprise Status Page – monitors uptime, latency, and operational health across OpsLink CAD, Hosting, Safeguard, Domains, and Infrastructure APIs.",
+  "main": "api/status-proxy.js",
+  "type": "module",
+  "scripts": {
+    "start": "vercel dev",
+    "dev": "vercel dev",
+    "build": "echo 'No build required for static + API project'",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "keywords": [
+    "opslink",
+    "status-page",
+    "opslink-systems",
+    "monitoring",
+    "uptime",
+    "vercel",
+    "api-proxy"
+  ],
+  "author": "OpsLink Systems Enterprise",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
