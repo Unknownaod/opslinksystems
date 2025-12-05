@@ -85,9 +85,9 @@
       const data = await res.json().catch(()=>({}));
       let status = (data.status || "ok").toLowerCase();
       if(!["ok","degraded","down"].includes(status)) status="ok";
-      return {name:ep.name,status,latency};
+      return {name:ep.name,status,latency,url:ep.url};
     } catch(e){
-      return {name:ep.name,status:"down",latency:null};
+      return {name:ep.name,status:"down",latency:null,url:ep.url};
     }
   }
 
@@ -114,13 +114,12 @@
         </div>
         <div class="service">
           <span>Endpoint:</span>
-          <span style="font-size:12px;color:var(--muted)">${r.url}</span>
+          <a href="${r.url}" target="_blank" style="font-size:12px;color:var(--brand-dark);text-decoration:none;">${r.url}</a>
         </div>
       `;
       container.appendChild(div);
     });
 
-    // global summary
     const statuses = results.map(r=>r.status);
     const globalDot = document.getElementById("globalDot");
     const globalText = document.getElementById("globalText");
@@ -142,5 +141,6 @@
   refreshStatus();
   setInterval(refreshStatus, 60000);
 </script>
+
 </body>
 </html>
