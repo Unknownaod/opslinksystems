@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OpsLink Systems Status</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Live operational status of all OpsLink Systems enterprise platforms — CAD, Hosting, Safeguard, Domains, and Infrastructure." />
+  <link rel="icon" href="https://opslinkcad.com/assets/OpsLinkLogo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand:#4E8CFF;--brand-dark:#1f4fd1;--bg:#fff;--text:#0f172a;--muted:#64748b;
+      --ok:#22c55e;--degraded:#eab308;--down:#ef4444;--radius:14px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif}
+    body{background:var(--bg);color:var(--text);overflow-x:hidden}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:24px 9%;
+      background:rgba(255,255,255,.7);backdrop-filter:blur(18px);border-bottom:1px solid rgba(0,0,0,.05);}
+    .logo{font-size:22px;font-weight:800;letter-spacing:-.6px;cursor:pointer;display:flex;flex-direction:column;line-height:1.1;}
+    .logo span.sub{font-size:11px;font-weight:500;color:var(--muted);}
+    .btn{padding:10px 20px;border-radius:999px;border:none;cursor:pointer;font-weight:600;font-size:14px;transition:.2s;}
+    .btn-outline{background:#fff;border:1px solid rgba(0,0,0,.08);}
+    .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:#fff;}
+    header{padding:80px 9% 40px;max-width:1100px;margin:auto;text-align:center;}
+    .status-banner{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;
+      background:rgba(78,140,255,.08);border:1px solid rgba(78,140,255,.18);margin-bottom:18px;}
+    .dot{width:10px;height:10px;border-radius:999px;}
+    .ok{background:var(--ok);} .degraded{background:var(--degraded);} .down{background:var(--down);}
+    .section{padding:30px 9%;max-width:1100px;margin:auto;}
+    .card{background:#fff;border:1px solid rgba(0,0,0,.05);border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(0,0,0,.03);padding:18px;margin-bottom:20px;}
+    .service{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed rgba(148,163,184,.35);
+      padding:10px 0;font-size:14px;}
+    .service:first-of-type{border-top:none;}
+    footer{text-align:center;padding:45px 0;margin-top:40px;color:var(--muted);border-top:1px solid rgba(0,0,0,.05);}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="logo" onclick="location.href='index.html'">
+    OpsLink Systems
+    <span class="sub">Enterprise Infrastructure Status</span>
+  </div>
+  <button class="btn btn-primary" onclick="refreshStatus()">Refresh</button>
+</nav>
+
+<header>
+  <div class="status-banner">
+    <div class="dot ok" id="globalDot"></div>
+    <span id="globalText">All systems operational</span>
+  </div>
+  <p id="updatedText" style="color:var(--muted);font-size:14px;margin-top:8px;">
+    Last updated: just now
+  </p>
+</header>
+
+<div class="section" id="statusContainer"></div>
+
+<footer>
+  © <span id="year"></span> OpsLink Systems Enterprise. All Rights Reserved.
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const endpoints = [
+    {name:"OpsLink CAD", url:"https://opslink-cad.onrender.com/api/status"},
+    {name:"OpsLink Hosting", url:"https://node2.opslinkcad.com/api/status"},
+    {name:"OpsLink Safeguard", url:"https://safeguard.opslinkcad.com/api/status"},
+    {name:"OpsLink Safeguard Premier", url:"https://safeguard-premier.opslinkcad.com/api/status"},
+    {name:"OpsLink Domains", url:"https://domains.opslinkcad.com/api/status"},
+    {name:"OpsLink Auth", url:"https://opslink-systems.vercel.app/api/auth/status"},
+    {name:"OpsLink Billing", url:"https://opslink-systems.vercel.app/api/billing/status"},
+    {name:"OpsLink Infrastructure", url:"https://infra.opslinkcad.com/api/nodes/status"},
+    {name:"OpsLink Panel", url:"https://panel.opslinkcad.com/api/status"},
+    {name:"OpsLink Website", url:"https://opslinksystems.xyz/api/status"}
+  ];
+
+  async function checkEndpoint(ep){
+    const start = performance.now();
+    try {
+      const res = await fetch(ep.url, {cache:"no-store", mode:"cors"});
+      const latency = Math.round(performance.now() - start);
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      const data = await res.json().catch(()=>({}));
+      let status = (data.status || "ok").toLowerCase();
+      if(!["ok","degraded","down"].includes(status)) status="ok";
+      return {name:ep.name,status,latency};
+    } catch(e){
+      return {name:ep.name,status:"down",latency:null};
+    }
+  }
+
+  async function refreshStatus(){
+    const container = document.getElementById("statusContainer");
+    container.innerHTML = "";
+    const results = await Promise.all(endpoints.map(checkEndpoint));
+
+    results.forEach(r=>{
+      const div = document.createElement("div");
+      div.className="card";
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <strong>${r.name}</strong>
+          <div class="dot ${r.status}"></div>
+        </div>
+        <div class="service">
+          <span>Status:</span>
+          <span>${r.status==="ok"?"Operational":r.status==="degraded"?"Degraded":"Outage"}</span>
+        </div>
+        <div class="service">
+          <span>Latency:</span>
+          <span>${r.latency!==null? r.latency+" ms":"N/A"}</span>
+        </div>
+        <div class="service">
+          <span>Endpoint:</span>
+          <span style="font-size:12px;color:var(--muted)">${r.url}</span>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    // global summary
+    const statuses = results.map(r=>r.status);
+    const globalDot = document.getElementById("globalDot");
+    const globalText = document.getElementById("globalText");
+    const updatedText = document.getElementById("updatedText");
+
+    if(statuses.includes("down")){
+      globalDot.className="dot down";
+      globalText.textContent="Service outage detected";
+    } else if(statuses.includes("degraded")){
+      globalDot.className="dot degraded";
+      globalText.textContent="Partial service degradation";
+    } else {
+      globalDot.className="dot ok";
+      globalText.textContent="All systems operational";
+    }
+    updatedText.textContent = "Last updated: "+new Date().toLocaleString();
+  }
+
+  refreshStatus();
+  setInterval(refreshStatus, 60000);
+</script>
+</body>
+</html>
